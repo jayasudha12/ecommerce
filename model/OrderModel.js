@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
 const orderschema = new mongoose.Schema({
+    orderid:{
+        type:String,
+        required:true
+
+    },
     userid : {
         type:String,
         required:true
@@ -37,6 +42,10 @@ const orderschema = new mongoose.Schema({
         default: function() {
             return new Date(Date.now()+10*24*60*60*1000); 
         }
+    },
+    orderstatus:{
+        type:String,
+        default : "In progess"
     }
 })
 

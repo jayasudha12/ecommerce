@@ -2,6 +2,7 @@ const Order = require('../model/OrderModel');
 const User = require('../model/UserModel');
 const Cart = require('../model/CartModel');
 const Product = require('../model/ProductModel');
+const { v4: uuidv4 } = require('uuid');
 
 const createOrder = async (req, res) => {
   try {
@@ -44,6 +45,7 @@ const createOrder = async (req, res) => {
 
     
     const newOrder = new Order({
+      orderid : uuidv4(),
       userid: userId,
       name: name || user.name,
       email: user.email,
@@ -66,5 +68,41 @@ const createOrder = async (req, res) => {
     res.status(500).send({ message: "Internal server error" });
   }
 };
+const getorder = async (req,res)=>{
+  try {
+    const userid = req.user;
+    const order = await Order.findOne({ userid });
+  
+  
+    if (order) {
+        const arr = [];
+        for (const item of order.products) {
+          const product = await Product.findOne({ id: item.productid });
 
-module.exports = { createOrder };
+            if (product) {
+                arr.push({
+                    title : product.title,
+                    description : product.description,
+                    price : product.price,
+                    category : product.category,
+                    image : product.image,
+                    quantity: item.quantity,
+                   
+                });
+            }
+        }
+
+        res.status(200).json({orderid:order.orderid, products: arr,totalamount:order.totalamount,
+          orderdate:order.orderdate,
+          estimatedate:order.estimatedate ,
+        orderstatus:order.orderstatus});
+    } else {
+        res.status(404).json({ msg: "Order not found" });
+    }
+} catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Internal server error" });
+}
+}
+
+module.exports = { createOrder,getorder };
