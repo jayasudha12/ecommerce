@@ -43,6 +43,7 @@ const login = async(req,res)=>{
     res.json({token});
 }
 catch(error){
+    
    res.status(500).send({msg:"Internal server error",error})
 }
 }
