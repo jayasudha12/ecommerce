@@ -3,8 +3,8 @@ const { v4: uuidv4 } = require('uuid');
 const getallproducts = async(req,res)=>{
     
     try{
-    const id = req.params.id;
-    const Products = await product.find(id);
+    
+    const Products = await product.find();
     if(Products){ 
         res.status(200).send(Products);
     }
