@@ -38,7 +38,7 @@ const login = async(req,res)=>{
         return res.status(400).send({msg:"please provide valid password"});
     }
     const token = jwt.sign({_id : exists._id},'secret_key',{
-        expiresIn: "1h",
+        expiresIn: "24h",
     })
     res.json({token});
 }
